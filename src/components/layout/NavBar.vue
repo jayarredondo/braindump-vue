@@ -23,13 +23,22 @@ const showMobileNav = ref(false);
           <span aria-hidden="true"></span>
         </a>
       </div>
-      <div id="navbarBasicExample" class="navbar-menu" :class="{ 'is-active' : showMobileNav }">
+      <div
+        id="navbarBasicExample"
+        class="navbar-menu"
+        :class="{ 'is-active': showMobileNav }"
+      >
         <div class="navbar-end">
           <div class="navbar-item">
-            <router-link class="navbar-item" active-class="is-active" to="/"
+            <router-link
+              @click="showMobileNav = false"
+              class="navbar-item"
+              active-class="is-active"
+              to="/"
               >Notes</router-link
             >
             <router-link
+              @click="showMobileNav = false"
               class="navbar-item"
               active-class="is-active"
               to="/stats"
@@ -43,10 +52,10 @@ const showMobileNav = ref(false);
 </template>
 <style>
 @media (max-width: 1023px) {
-    .navbar-menu {
-        position: absolute;
-        left: 0;
-        width: 100%;
-    }
+  .navbar-menu {
+    position: absolute;
+    left: 0;
+    width: 100%;
+  }
 }
 </style>

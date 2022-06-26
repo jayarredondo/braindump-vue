@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "@vue/reactivity";
-import Note from "../components/Notes/Note.vue";
+import Note from "../components/Notes/SingleNote.vue";
 const newNote = ref("");
 const newNoteRef = ref(null);
 const notes = ref([
@@ -25,6 +25,10 @@ const addNote = () => {
   newNote.value = "";
   newNoteRef.value.focus();
 };
+
+const deleteNote = (idToDelete) => {
+  notes.value = notes.value.filter(note => note.id !== idToDelete);
+}
 </script>
 <template>
   <div class="notes">
@@ -51,6 +55,6 @@ const addNote = () => {
         </div>
       </div>
     </div>
-    <Note v-for="note in notes" :key="note.id" :note="note" />
+    <Note v-for="note in notes" :key="note.id" :note="note" @delete-clicked="deleteNote"/>
   </div>
 </template>

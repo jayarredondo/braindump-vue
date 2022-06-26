@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps, computed } from 'vue';
 const props = defineProps({
     note: {
         type: Object,
@@ -7,6 +7,17 @@ const props = defineProps({
     }
 });
 
+const emit = defineEmits(['deleteClicked'])
+
+const charCount = computed(() => {
+  let length = props.note.content.length
+  let description = length > 1 ? 'characters' : 'character';
+  return `${length} ${description}`;
+})
+
+const handleDeleteClicked = () => {
+  emit('deleteClicked', props.note.id);
+}
 </script>
 <template>
   <div class="card mb-4">
@@ -20,7 +31,7 @@ const props = defineProps({
     </div>
     <footer class="card-footer">
       <a href="#" class="card-footer-item">Edit</a>
-      <a href="#" class="card-footer-item">Delete</a>
+      <a href="#" class="card-footer-item" @click.prevent="handleDeleteClicked">Delete</a>
     </footer>
   </div>
 </template>

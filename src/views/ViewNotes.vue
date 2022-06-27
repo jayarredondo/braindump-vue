@@ -41,5 +41,8 @@ useWatchCharacters(newNote, 150);
     <template v-else>
       <Note v-for="note in notesStore.notes" :key="note.id" :note="note" />
     </template>
+    <div class="is-size-4 has-text-centered has-text-grey-light is-family-monospace py-6" v-if="!notesStore.notes.length">
+      No new notes...
+    </div>
   </div>
 </template>

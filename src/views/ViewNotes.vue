@@ -1,9 +1,9 @@
 <script setup>
-import { ref } from "@vue/reactivity";
+import { ref } from "vue";
 import Note from "../components/Notes/SingleNote.vue";
-import AddEditNoteVue from "../components/Notes/AddEditNote.vue";
+import AddEditNote from "../components/Notes/AddEditNote.vue";
 import { useNotesStore } from "../stores/notesStore.js";
-
+import { useWatchCharacters } from '../use/useWatchCharacters.js'
 const newNote = ref("");
 const addEditNoteRef = ref(null)
 const notesStore = useNotesStore();
@@ -13,10 +13,13 @@ const addNote = () => {
   newNote.value = "";
   addEditNoteRef.value.focusTextarea()
 };
+
+useWatchCharacters(newNote, 150);
+
 </script>
 <template>
   <div class="notes">
-    <AddEditNoteVue v-model="newNote" ref="addEditNoteRef" placeholder="Add a new note">
+    <AddEditNote v-model="newNote" ref="addEditNoteRef" placeholder="Add a new note">
       <template #buttons>
         <button
           class="button is-link has-background-success"
@@ -26,7 +29,7 @@ const addNote = () => {
           Add New Note
         </button>
       </template>
-    </AddEditNoteVue>
+    </AddEditNote>
     <Note v-for="note in notesStore.notes" :key="note.id" :note="note" />
   </div>
 </template>

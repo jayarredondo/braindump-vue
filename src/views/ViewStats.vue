@@ -1,6 +1,11 @@
 <script setup>
+import { ref } from 'vue';
 import { useNotesStore } from '../stores/notesStore';
+import { vAutofocus } from '../directives/vAutofocus';
+import { useWatchCharacters } from '../use/useWatchCharacters';
 const notesStore = useNotesStore();
+const input = ref('');
+useWatchCharacters(input, 50)
 
 </script>
 <template>
@@ -23,5 +28,6 @@ const notesStore = useNotesStore();
         </tr>
       </tbody>
     </table>
+    <input v-autofocus type="text" maxlength="50" class="input" placeholder="Type something..." v-model="input">
   </div>
 </template>

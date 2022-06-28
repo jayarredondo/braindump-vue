@@ -1,5 +1,8 @@
 <script setup>
 import { ref, computed, reactive } from "vue";
+import { useAuthStore } from "../stores/authStore";
+
+const authStore = useAuthStore();
 const register = ref(false);
 const formTitle = computed(() => {
   return register.value === true ? "Register" : "Sign-In";
@@ -15,9 +18,9 @@ const onSubmit = () => {
     alert("Please enter an email and password.");
   } else {
     if (register.value) {
-      console.log("Register user with these credentials: ", credentials);
+      authStore.registerUser(credentials);
     } else {
-      console.log("Login user with these credentials: ", credentials);
+      authStore.loginUser(credentials);
     }
   }
 };
@@ -39,7 +42,7 @@ const onSubmit = () => {
         <div class="title has-text-centered">
           {{ formTitle }}
         </div>
-        <form @submite.prevent="onSubmit">
+        <form @submit.prevent="onSubmit">
           <div class="field">
             <label class="label">Email: </label>
             <div class="control">

@@ -1,15 +1,26 @@
 <script setup>
 import { ref } from "vue";
-import { onClickOutside } from '@vueuse/core';
+import { onClickOutside } from "@vueuse/core";
+import { useAuthStore } from "../../stores/authStore";
 
+const authStore = useAuthStore();
 const navBarMenuRef = ref(null);
 const showMobileNav = ref(false);
 const navbarBurger = ref(null);
 
 // https://vueuse.org/core/onClickOutside/
-onClickOutside(navBarMenuRef, (event) => {
+onClickOutside(
+  navBarMenuRef,
+  (event) => {
+    showMobileNav.value = false;
+  },
+  { ignore: [navbarBurger] }
+);
+
+const logout = () => {
   showMobileNav.value = false;
-}, {ignore: [navbarBurger]})
+  authStore.logoutUser();
+}
 
 </script>
 <template>
@@ -39,6 +50,15 @@ onClickOutside(navBarMenuRef, (event) => {
         class="navbar-menu"
         :class="{ 'is-active': showMobileNav }"
       >
+        <div class="navbar-start">
+          <button
+            v-if="authStore.user.id"
+            class="button is-small is-info mt-3 ml-3"
+            @click="logout"
+          >
+            Logout {{authStore.user.email}}
+          </button>
+        </div>
         <div class="navbar-end">
           <div class="navbar-item">
             <router-link

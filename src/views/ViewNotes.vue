@@ -1,12 +1,14 @@
 <script setup>
 import { ref } from "vue";
-import Note from "../components/Notes/SingleNote.vue";
+import Note from "../components/notes/SingleNote.vue";
 import AddEditNote from "../components/Notes/AddEditNote.vue";
 import { useNotesStore } from "../stores/notesStore.js";
+// import { useAuthStore } from "../stores/authStore";
 import { useWatchCharacters } from "../use/useWatchCharacters.js";
 const newNote = ref("");
 const addEditNoteRef = ref(null);
 const notesStore = useNotesStore();
+
 
 const addNote = () => {
   notesStore.addNote(newNote.value);

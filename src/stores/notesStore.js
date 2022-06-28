@@ -10,33 +10,40 @@ import {
   orderBy,
 } from "firebase/firestore";
 import { db } from "../js/firebase";
-
-const notesCollection = collection(db, "notes");
-const notesCollectionQuery = query(notesCollection, orderBy("date", "desc"));
-
+import { useAuthStore } from "./authStore.js";
+let notesCollection;
+let notesCollectionQuery;
+let getNotesSnapshot = null;
 export const useNotesStore = defineStore("notesStore", {
   state: () => {
     return {
       notes: [],
-      notesLoaded: false
+      notesLoaded: false,
     };
   },
   actions: {
+    // initialize our database refs
+    init() {
+      const authStore = useAuthStore();
+      notesCollection = collection(db, "users", authStore.user.id, "notes");
+      notesCollectionQuery = query(notesCollection, orderBy("date", "desc"));
+      this.getNotes();
+    },
     async getNotes() {
       // real-time-updates
-      this.notesLoaded = false
-      onSnapshot(notesCollectionQuery, (querySnapshot) => {
+      this.notesLoaded = false;
+      getNotesSnapshot = onSnapshot(notesCollectionQuery, (querySnapshot) => {
         let notes = [];
         querySnapshot.forEach((doc) => {
           let note = {
             id: doc.id,
             content: doc.data().content,
-            date: doc.data().date
+            date: doc.data().date,
           };
           notes.push(note);
         });
         this.notes = notes;
-        this.notesLoaded = true
+        this.notesLoaded = true;
       });
     },
     async addNote(newNoteContent) {
@@ -54,6 +61,13 @@ export const useNotesStore = defineStore("notesStore", {
       await updateDoc(doc(notesCollection, id), {
         content,
       });
+    },
+    clearNotes() {
+      this.notes = [];
+      // unsubscribe from any active snapshot listener when the user logs out.
+      if (getNotesSnapshot) {
+        getNotesSnapshot();
+      }
     },
   },
   getters: {

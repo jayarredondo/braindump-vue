@@ -40,8 +40,8 @@ defineExpose({
           class="textarea"
           :placeholder="placeholder"
           ref="textareaRef"
-          v-model="modelValue"
-          @input="$emit('update:modelValue', modelValue)"
+          :value="modelValue"
+          @input="$emit('update:modelValue', $event.target.value)"
           maxlength="150"
         ></textarea>
       </div>
